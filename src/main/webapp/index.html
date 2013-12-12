@@ -4,47 +4,34 @@
   <input type="text" id="search_word" value="">
   <input type="submit" id="searchBtn" value="Search">
 
-  <div id="display" data-bind="template: 'hitOverview'"></div>
-
-  <script id="hitOverview" type="text/html">
-
-  <div>Total number: ${total}</div>
-
-  <table>
-    <tr>
-      <th>Name</th>
-      <th>Position</th>
-      <th>Nationality</th>
-      <th>Residence</th>
-    </tr>
-    {{each(i, person) hits}}
-      <tr>
-      <td>${_source["First Name"]} ${_source["Middle Name"]} ${_source["Last Name"]}</td>
-      <td>${_source["Position"]}</td>
-      <td>${_source["Country of Citizenship"]}</td>
-      <td>${_source["Country of residence"]}</td>
-    </tr>
-    {{/each}}
-
-  </table>
-
-  </script>
+  <div id="display"></div>
 
   <script>
 
+
+  function displayData(data) {
+    $('#display').html("")
+    $('#display').append("Results: "+data.total)
+    if (data.total > 0){
+      $('#display').append("<table><tr><th>Name</th><th>Position</th><th>Nationality</th><th>Residence</th></tr>")
+      $.each(data.hits, function(i, person) {
+        $('#display').append("<tr>")
+        $('#display').append("<td>"+person._source["First Name"]+" "+person._source["Middle Name"]+" "+person._source["Last Name"]+"</td>")
+        $('#display').append("<td>"+person._source["Position"]+"</td>")
+        $('#display').append("<td>"+person._source["Country of Citizenship"]+"</td>")
+        $('#display').append("<td>"+person._source["Country of residence"]+"</td>")
+        $('#display').append("</tr>")
+      })
+      $('#display').append("</table>");
+    }
+  }
+
   $( "#searchBtn" ).click(function() {
-    ko.cleanNode($('#display')[0]);
     var search_word = $('#search_word').val()
     $.get( "http://localhost:8080/es/search/"+search_word, function( json ) {
     var data = JSON.parse(json);
-
-    ko.bindingHandlers.stopBinding = {
-      init: function() {
-        return { controlsDescendantBindings: true };
-      }
-    };
-    ko.applyBindings(data);
-    });
+    displayData(data)
+  })
   })
 
   </script>

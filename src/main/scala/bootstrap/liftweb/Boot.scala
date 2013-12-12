@@ -10,7 +10,7 @@ import Helpers._
 import _root_.net.liftweb.mapper.{DB, ConnectionManager, Schemifier, DefaultConnectionIdentifier, StandardDBVendor}
 import _root_.java.sql.{Connection, DriverManager}
 import _root_.com.tesobe.pepsearch.model._
-import com.tesobe.code.SearchAPI
+import com.tesobe.api.SearchAPI
 
 
 /**
