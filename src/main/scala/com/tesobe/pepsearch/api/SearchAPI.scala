@@ -18,17 +18,12 @@ import org.elasticsearch.node.NodeBuilder.nodeBuilder
 object SearchAPI extends RestHelper with Loggable {
   serve {
     case "es" :: "search" :: search_words :: _ JsonGet _ => {
-      var search_string = ""
-      val search_word_array = search_words.split(" ")
-      for (word <- search_word_array){
-        search_string += " +"+word
-      }
       val node = nodeBuilder().client(true).node()
       val client = node.client()
       val response: SearchResponse = client.prepareSearch("people")
       .setTypes("person")
       //accurate search:
-      .setQuery(QueryBuilders.queryString(search_string).field("First Name").field("Middle Name").field("Last Name"))
+      .setQuery(QueryBuilders.queryString(search_words).field("First Name").field("Middle Name").field("Last Name"))
       //fuzzy search:
       // .setQuery(QueryBuilders.multiMatchQuery(search_words,"First Name", "Middle Name", "Last Name"))
       .execute()

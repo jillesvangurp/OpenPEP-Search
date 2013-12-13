@@ -4,10 +4,18 @@
   <input type="text" id="search_word" value="">
   <input type="submit" id="searchBtn" value="Search">
 
+  <div id="advancedSearch">
+    <input type="radio" name="field" value="first">First Name
+    <input type="radio" name="field" value="last">Last Name
+    <input type="radio" name="field" value="all" checked="checked">All
+
+    <input type="submit" id="advancedSearchBtn" value="Advanced search">
+  </div>
+  <!-- <p id="advanced">Advanced search</p> -->
+
   <div id="display"></div>
 
   <script>
-
 
   function displayData(data) {
     $('#display').html("")
@@ -16,7 +24,7 @@
       $('#display').append("<table><tr><th>Name</th><th>Position</th><th>Nationality</th><th>Residence</th></tr>")
       $.each(data.hits, function(i, person) {
         $('#display').append("<tr>")
-        $('#display').append("<td>"+person._source["First Name"]+" "+person._source["Middle Name"]+" "+person._source["Last Name"]+"</td>")
+        $('#display').append("<td class='personRow' name="+i+">"+person._source["First Name"]+" "+person._source["Middle Name"]+" "+person._source["Last Name"]+"</td>")
         $('#display').append("<td>"+person._source["Position"]+"</td>")
         $('#display').append("<td>"+person._source["Country of Citizenship"]+"</td>")
         $('#display').append("<td>"+person._source["Country of residence"]+"</td>")
@@ -24,15 +32,25 @@
       })
       $('#display').append("</table>");
     }
+    enableDoubleClick(data.hits)
+  }
+
+  function enableDoubleClick(hits) {
+    $(".personRow" ).dblclick(function() {
+      // console.log(hits[$(this).attr("name")])
+      console.log(hits[$(this).attr("name")]._source["First Name"])
+    })
   }
 
   $( "#searchBtn" ).click(function() {
     var search_word = $('#search_word').val()
     $.get( "http://localhost:8080/es/search/"+search_word, function( json ) {
-    var data = JSON.parse(json);
-    displayData(data)
+      var data = JSON.parse(json)
+      displayData(data)
+    })
   })
-  })
+
+
 
   </script>
 </div>
