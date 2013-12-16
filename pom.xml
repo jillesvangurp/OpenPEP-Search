@@ -101,6 +101,11 @@
       <artifactId>logback-classic</artifactId>
       <version>1.0.9</version>
     </dependency>
+    <dependency>
+      <groupId>net.databinder.dispatch</groupId>
+      <artifactId>dispatch-core_2.10</artifactId>
+      <version>0.11.0</version>
+    </dependency>
   </dependencies>
 
   <build>
@@ -163,7 +168,8 @@
           <scanIntervalSeconds>5</scanIntervalSeconds>
         </configuration>
       </plugin>
-     <plugin>
+<!-- TODO: Fix jquery compressing error -->
+<!--      <plugin>
         <groupId>net.alchim31.maven</groupId>
         <artifactId>yuicompressor-maven-plugin</artifactId>
         <version>1.3.2</version>
@@ -177,7 +183,7 @@
         <configuration>
           <nosuffix>true</nosuffix>
         </configuration>
-      </plugin>
+      </plugin> -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-idea-plugin</artifactId>

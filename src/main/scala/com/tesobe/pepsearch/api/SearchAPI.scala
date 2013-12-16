@@ -1,40 +1,44 @@
 package com.tesobe.api
 
-import net.liftweb.http._
-import js.JsExp
-import net.liftweb.http.rest._
+import net.liftweb.common.{Full, Loggable}
+import net.liftweb.http.js.JsExp
 import net.liftweb.http.JsonResponse
+import net.liftweb.http.rest._
 import net.liftweb.json.Extraction
-import net.liftweb.common.Loggable
+import net.liftweb.json.JsonAST.JValue
+import net.liftweb.json.parse
+import net.liftweb.json.Serialization.write
+import org.json._
+import dispatch._, Defaults._
+import scala.concurrent.Await
+import scala.concurrent.duration._
 
-import org.json.JSONObject
-import org.elasticsearch.action.search.SearchResponse;
-import org.elasticsearch.action.search.SearchType;
-import org.elasticsearch.client.Client
-import org.elasticsearch.index.query.FilterBuilders._;
-import org.elasticsearch.index.query.QueryBuilders;
-import org.elasticsearch.node.NodeBuilder.nodeBuilder
+
+case class APIResponse(code: Int, body: JValue)
 
 object SearchAPI extends RestHelper with Loggable {
   serve {
-    case "es" :: "search" :: search_words :: _ JsonGet _ => {
-      val node = nodeBuilder().client(true).node()
-      val client = node.client()
-      val response: SearchResponse = client.prepareSearch("people")
-      .setTypes("person")
-      //accurate search:
-      .setQuery(QueryBuilders.queryString(search_words).field("First Name").field("Middle Name").field("Last Name"))
-      //fuzzy search:
-      // .setQuery(QueryBuilders.multiMatchQuery(search_words,"First Name", "Middle Name", "Last Name"))
-      .execute()
-      .actionGet();
-      val hitFields = new JSONObject(response.toString)
-      val hitsJson = hitFields.getJSONObject("hits")
-      object json extends JsExp{
-        def toJsCmd = hitsJson.toString
-      }
-      JsonResponse(json,("Access-Control-Allow-Origin","*") :: Nil, Nil, 200)
+    case "search" :: Nil JsonPost jsonBody -> _ => {
+      val request =
+        url("http://localhost:9200/_search")
+        .addHeader("Content-Type", "application/json")
+        .setBody(write(jsonBody))
+        .POST
+      val response = getAPIResponse(request)
+    JsonResponse(response.body,("Access-Control-Allow-Origin","*") :: Nil, Nil, 200)
     }
   }
+
+  private def getAPIResponse(req : Req) : APIResponse = {
+    Await.result(
+      for(response <- Http(req > as.Response(p => p)))
+      yield
+      {
+        val body = if(response.getResponseBody().isEmpty) "{}" else response.getResponseBody()
+        APIResponse(response.getStatusCode, parse(body))
+      }
+    , Duration.Inf)
+  }
+
 }
 

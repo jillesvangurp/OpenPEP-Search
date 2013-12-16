@@ -2,16 +2,17 @@
   <h2>Fragments of a search interface</h2>
 
   <input type="text" id="search_word" value="">
-  <input type="submit" id="searchBtn" value="Search">
+
 
   <div id="advancedSearch">
     <input type="radio" name="field" value="first">First Name
     <input type="radio" name="field" value="last">Last Name
     <input type="radio" name="field" value="all" checked="checked">All
-
-    <input type="submit" id="advancedSearchBtn" value="Advanced search">
+<br/>
+    <input type="text" id="residence">Country of Residence<br/>
+    <input type="text" id="citizenship">Country of Citizenship<br/>
+    <input type="submit" id="searchBtn" value="Search">
   </div>
-  <!-- <p id="advanced">Advanced search</p> -->
 
   <div id="display"></div>
 
@@ -42,17 +43,76 @@
     })
   }
 
-  $( "#searchBtn" ).click(function() {
-    var search_word = $('#search_word').val()
-    $.get( "http://localhost:8080/es/search/"+search_word, function( json ) {
-      var data = JSON.parse(json)
-      displayData(data)
-    })
-  })
+  function getNameArray(){
+    var name_array = []
+    var name_field = $('input[name=field]:checked').val()
+    if(name_field == "first")
+      name_array = ["First Name"]
+    else if (name_field == "last")
+      name_array = ["Last Name"]
+    else
+      name_array = ["First Name", "Middle Name", "Last Name"]
+    return JSON.stringify(name_array)
+  }
+
+//nicer: (and then use data: JSON.stringify(search_json) in ajax-function)
+  // var search_json = {
+  //   "query" : {
+  //     "multi_match" : {
+  //       "query" : ""+$('#search_word')+"",
+  //       "fields" : getNameArray()
+  //     }
+  //     "match" : {
+  //       "Country of residence" : ""+$('#residence')+""
+  //     },
+  //     "match" : {
+  //       "Country of Citizenship" : ""+$('#citizenship')+""
+  //     }
+  //   }
+  // }
+
+function createSearchJson(){
+  var search_json = '{'
+  search_json += '  "query" : {'
+  search_json += '    "bool" : {'
+  search_json += '      "must" : ['
+  search_json += '        {'
+  search_json += '          "multi_match" : {'
+  search_json += '            "query" : "'+$('#search_word').val()+'",'
+  search_json += '            "fields" : '+getNameArray()
+  search_json += '          }'
+  search_json += '        }'
+  if ($('#residence').val() != ""){
+    search_json += '        ,{'
+    search_json += '          "match" : {"City of residence" : "'+$('#residence').val()+'}'
+    search_json += '        }'
+  }
+  if ($('#citizenship').val() != ""){
+    search_json += '        ,{'
+    search_json += '          "match" : {"City of Citizenship" : "'+$('#citizenship').val()+'}'
+    search_json += '        }'
+  }
+  search_json += '      ]'
+  search_json += '    }'
+  search_json += '  }'
+  search_json += '}'
+  return search_json
+}
 
 
 
+  $("#searchBtn").click(function() {
+    $.ajax({
+      type: "POST",
+      url: "http://localhost:8080/search",
+      data: createSearchJson(),
+      success: function(data){
+        displayData(data.hits)
+      },
+      dataType: "json",
+      contentType:'application/json'
+      });
+   })
   </script>
 </div>
-
 
