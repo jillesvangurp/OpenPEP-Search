@@ -1,0 +1,102 @@
+#search-bar{
+  height: 40px;
+}
+
+#search-field{
+  margin: 0 auto;
+  width: 400px;
+}
+input[type=text]{
+  border: medium none;
+  float: left;
+  font-size: 20px;
+  padding: 9px;
+  width: 340px;
+}
+#searchBtn{
+  background-color: #0692b0;
+  width: 40px;
+  float: left;
+  padding: 1px;
+}
+#searchBtn img{
+  padding: 9px;;
+}
+#searchBtn:hover{
+  cursor: pointer;
+}
+
+#links{
+  height: 100%;
+  font-size: 14px;
+  font-weight: bold;
+  font-style: italic;
+  width: 250px;
+  float: right;
+}
+#links div{
+  float: right;
+  width: 80px;
+  text-align: right;
+  margin-right: 10px;
+  margin-top: 8px;
+}
+#links a{
+  text-decoration: none;
+  color: #4A4848;
+  float: right;
+  width: 80px;
+  text-align: right;
+  margin-right: 10px;
+  margin-top: 8px;
+}
+#links div:hover{
+  cursor: pointer;
+}
+
+.advancedBtn{
+  background-color: #FFFFFF;
+  font: italic bold 11px "Bender";
+  height: 18px;
+  width: 130px;
+  text-align: center;
+  padding-top: 5px;
+  margin-left: 520px;
+}
+.advancedBtn:hover{
+  cursor: pointer;
+}
+
+.search-info{
+  color: #343637;
+  font: 24px "FaunaOne";
+  margin: 60px auto 100px;
+  text-align: justify;
+  width: 630px;
+}
+
+.displayResults{
+  background-color: #FFFFFF;
+  height: 500px;
+  margin-top: -23px;
+  padding-top: 30px;
+  padding-bottom: 100px;
+}
+#resultTable{
+  font: 16px "FaunaOne";
+  color: #5c5a5a;
+  margin:15px;
+  border-collapse: collapse;
+}
+#resultTable th{
+  color: #00CBF9;
+  font: italic bold 14px "Bender";
+  text-align: left;
+  padding-bottom: 13px;
+}
+#resultTable td {
+  height: 30px;
+  border-top: 1px solid #dfe0e1;
+  border-bottom: 1px solid #dfe0e1;
+  min-width: 100px;
+}
