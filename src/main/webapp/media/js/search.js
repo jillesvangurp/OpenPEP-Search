@@ -13,11 +13,11 @@ function displayData(data) {
         $('#personRow'+i).append("<td>"+person._source["Country of Citizenship"]+"</td>")
         $('#personRow'+i).append("<td>"+person._source["Country of residence"]+"</td>")
       })
-      // $('#display').append("</table>");
       enableClick(data.hits)
     }
     else{
-      $('#display').append('<p class="not-found">I looks like we haven\'t found <br/><b>'+$('#search_word').val()+'</b> in our database.<p>')
+      $('#display').append('<p class="not-found">It looks like we haven’t found the name you gave us in our database. This does not necessarily mean that the individual you are looking for is not a PEP. We encourage financial institutions to take a comprehensive risk based approach to due diligence.
+Registered users are invited to search other sources and add information to the database.<p>')
     }
   }
 
@@ -94,6 +94,7 @@ function createSearchJson(){
 $(document).ready(function(){
   getSearchParam()
   $("#searchBtn").click(function() {
+    $('#advancedSearchBox').css( "visibility", "hidden" )
     if(($(location).attr('pathname').indexOf("/about") != -1) || ($(location).attr('pathname').indexOf("/details")!= -1)){
       var search_word = $('#search_word').val()
       window.location.href = '/index.html?s='+search_word;
@@ -102,7 +103,17 @@ $(document).ready(function(){
       sendSearchRequest()
     }
    })
+
+  $("#advancedBtn").click(function() {
+    $('#advancedSearchBox').css( "visibility", "visible" )
+    $("#birthday").datepicker(); //TODO!
+
+    $("#closeBox").click(function() {
+      $('#advancedSearchBox').css( "visibility", "hidden" )
+     })
+   })
 })
+
 
 function sendSearchRequest(){
   $.ajax({

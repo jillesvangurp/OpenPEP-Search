@@ -41,6 +41,7 @@ body{
   width: 900px;
   padding: 10px;
   margin: 0 auto;
+  position: relative;
 }
 .clear{
   clear: both;
@@ -66,4 +67,72 @@ footer .footer-right{
   font-size: 12px;
   font-weight: bold;
   float: right;
+}
+
+#advancedSearchBox{
+  background-color: #d3d2d3;
+  font-size: 13px;
+  position: absolute;
+  width: 900px;
+  top: 217px;
+  padding-top: 22px;
+  visibility: hidden;
+}
+input[type=radio] {
+  display:none;
+  margin:10px;
+
+}
+input[type=radio] + label {
+  display:inline-block;
+  margin:10px;
+  padding: 5px 10px;
+  background-color: #FFFFFF;
+  color: #4a4848;
+  width: 100px;
+}
+input[type=radio]:checked + label {
+  background-image: none;
+  background-color:#4a4848;
+  color: #FFFFFF;
+}
+#nameFields{
+  width: 450px;
+  margin: 0 auto;
+}
+#inputFields{
+  padding-top: 20px ;
+  padding-bottom: 50px ;
+  width: 250px;
+  margin: 0 auto;
+}
+#inputFields input{
+  font-size: 14px;
+  width: 250px;
+  color: #4a4848;
+  border: medium none;
+  padding: 5px;
+  margin: 5px;
+}
+/*#inputFields input::-webkit-input-placeholder { color:#4a4848; }
+#inputFields input::-moz-placeholder { color:#4a4848; }
+#inputFields input:-ms-input-placeholder { color:#4a4848; }
+#inputFields input:-moz-placeholder { color:#4a4848; }*/
+#closeBox{
+  background-color: #4A4848;
+  color: #FFFFFF;
+  font-style: italic;
+  font-weight: bold;
+  height: 35px;
+  padding: 5px;
+  position: absolute;
+  right: 0;
+  width: 35px;
+}
+#closeBox:hover{
+  cursor: pointer;
+}
+
+#inputFields input#birthday {
+  width: 200px;
 }

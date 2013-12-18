@@ -6,7 +6,7 @@
   margin: 0 auto;
   width: 400px;
 }
-input[type=text]{
+input#search_word{
   border: medium none;
   float: left;
   font-size: 21px;
@@ -54,7 +54,7 @@ input[type=text]{
   cursor: pointer;
 }
 
-.advancedBtn{
+#advancedBtn{
   background-color: #FFFFFF;
   font: italic bold 11px "Bender";
   height: 18px;
@@ -62,8 +62,9 @@ input[type=text]{
   text-align: center;
   padding-top: 5px;
   margin-left: 520px;
+  position: relative;
 }
-.advancedBtn:hover{
+#advancedBtn:hover{
   cursor: pointer;
 }
 
