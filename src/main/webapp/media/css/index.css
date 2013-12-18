@@ -9,7 +9,7 @@
 input[type=text]{
   border: medium none;
   float: left;
-  font-size: 20px;
+  font-size: 21px;
   padding: 9px;
   width: 340px;
 }
@@ -75,28 +75,47 @@ input[type=text]{
   width: 630px;
 }
 
-.displayResults{
+.displayResults, .displayDetails{
   background-color: #FFFFFF;
   height: 500px;
   margin-top: -23px;
   padding-top: 30px;
   padding-bottom: 100px;
 }
-#resultTable{
+.displayDetails{
+  padding-left: 30px;
+}
+.displayDetails #fieldCol{
+  width: 320px;
+}
+.displayDetails #valueCol{
+  width: 480px;
+}
+
+table{
   font: 16px "FaunaOne";
   color: #5c5a5a;
   margin:15px;
   border-collapse: collapse;
 }
-#resultTable th{
+table th{
   color: #00CBF9;
   font: italic bold 14px "Bender";
   text-align: left;
   padding-bottom: 13px;
 }
-#resultTable td {
+table td {
   height: 30px;
   border-top: 1px solid #dfe0e1;
   border-bottom: 1px solid #dfe0e1;
   min-width: 100px;
+}
+
+.not-found{
+  font: 29px "FaunaOne";
+  padding: 0 40px;
+}
+
+.personRow:hover{
+  cursor: pointer;
 }

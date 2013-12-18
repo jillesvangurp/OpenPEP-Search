@@ -1,0 +1,30 @@
+#about{
+  background-color: #FFFFFF;
+  color: #343637;
+  font: 14px "FaunaOne";
+  margin-top: -23px;
+  padding: 5px 20px 400px;
+}
+#about-headline{
+  font: 53px "Bender";
+  font-weight: bold;
+  color: #6e6f70;
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+.about-info-left{
+  padding-right: 70px;
+}
+.about-info-right{
+}
+
+#about div{
+  width: 45%;
+  float: left;
+}
+#about img{
+  /*width: 300px;*/
+}
+#tech{
+  margin-top: 70px;
+}

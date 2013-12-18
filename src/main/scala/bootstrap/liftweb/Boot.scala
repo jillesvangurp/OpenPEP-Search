@@ -36,15 +36,13 @@ class Boot {
     Schemifier.schemify(true, Schemifier.infoF _, User)
 
     // Build SiteMap
-    def sitemap() = SiteMap(
-      Menu("Home") / "index" :: // Simple menu form
-      // Menu with special Link
-      Menu(Loc("Static", Link(List("static"), true, "/static/index"),
-	       "Static Content")) ::
-      // Menu entries for the User management stuff
-      User.sitemap :_*)
+    val sitemap = List(
+      Menu.i("Home") / "index",
+      Menu.i("About") / "about",
+      Menu.i("Details") / "details"
+    )
 
-    LiftRules.setSiteMapFunc(sitemap)
+    LiftRules.setSiteMap(SiteMap.build(sitemap.toArray))
 
     /*
      * Show the spinny image when an Ajax call starts

@@ -12,7 +12,7 @@ body{
   font: 13px "Bender";
   color: #4a4848;
 }
-.blue{
+.blue, a{
   color: #00cbf9;
 }
 .hr{
