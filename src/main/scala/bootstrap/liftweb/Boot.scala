@@ -76,6 +76,10 @@ class Boot {
     LiftRules.early.append(makeUtf8)
 
     LiftRules.dispatch.append(SearchAPI)
+
+    // Use HTML5 for rendering
+    LiftRules.htmlProperties.default.set((r: Req) =>
+      new Html5Properties(r.userAgent))
   }
 
   /**

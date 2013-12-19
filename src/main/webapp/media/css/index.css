@@ -28,76 +28,8 @@ Berlin 13359, Germany
   Ayoub Benali: ayoub AT tesobe DOT com
 
  */
- #search-bar{
-  height: 40px;
-}
 
-#search-field{
-  margin: 0 auto;
-  width: 400px;
-}
-input#search_word{
-  border: medium none;
-  float: left;
-  font-size: 21px;
-  padding: 9px;
-  width: 340px;
-}
-#searchBtn{
-  background-color: #0692b0;
-  width: 40px;
-  float: left;
-  padding: 1px;
-}
-#searchBtn img{
-  padding: 9px;;
-}
-#searchBtn:hover{
-  cursor: pointer;
-}
-
-#links{
-  height: 100%;
-  font-size: 14px;
-  font-weight: bold;
-  font-style: italic;
-  width: 250px;
-  float: right;
-}
-#links div{
-  float: right;
-  width: 80px;
-  text-align: right;
-  margin-right: 10px;
-  margin-top: 8px;
-}
-#links a{
-  text-decoration: none;
-  color: #4A4848;
-  float: right;
-  width: 80px;
-  text-align: right;
-  margin-right: 10px;
-  margin-top: 8px;
-}
-#links div:hover{
-  cursor: pointer;
-}
-
-#advancedBtn{
-  background-color: #FFFFFF;
-  font: italic bold 11px "Bender";
-  height: 18px;
-  width: 130px;
-  text-align: center;
-  padding-top: 5px;
-  margin-left: 520px;
-  position: relative;
-}
-#advancedBtn:hover{
-  cursor: pointer;
-}
-
+/* Text on start page */
 .search-info{
   color: #343637;
   font: 24px "FaunaOne";
@@ -106,6 +38,7 @@ input#search_word{
   width: 630px;
 }
 
+/* displaying search results */
 .displayResults, .displayDetails{
   background-color: #FFFFFF;
   height: 500px;
@@ -114,7 +47,7 @@ input#search_word{
   padding-bottom: 100px;
 }
 .displayDetails{
-  padding-left: 30px;
+  padding-left: 15px;
 }
 .displayDetails #fieldCol{
   width: 320px;
@@ -122,11 +55,10 @@ input#search_word{
 .displayDetails #valueCol{
   width: 480px;
 }
-
 table{
   font: 16px "FaunaOne";
   color: #5c5a5a;
-  margin:15px;
+  margin:30px;
   border-collapse: collapse;
 }
 table th{
@@ -143,14 +75,32 @@ table td {
 #resultTable td{
   min-width: 100px;
 }
+.personRow:hover{
+  cursor: pointer;
+  background-color: #d3d2d3;
+}
+#moreResults{
+  background-color: #0692B0;
+  color: #FFFFFF;
+  float: right;
+  font-weight: bold;
+  height: 15px;
+  margin-right: 50px;
+  padding: 10px;
+  width: 130px;
+  margin-top: 25px;
+  font: bold 13px "Bender";
+  text-transform:  uppercase
+}
+#moreResults:hover{
+  cursor: pointer;
+}
+#moreResults img{
+  padding-right: 10px;
+}
 
 .not-found{
   font: 24px "FaunaOne";
   padding: 0 40px;
   text-align: justify;
-}
-
-.personRow:hover{
-  cursor: pointer;
-  background-color: #d3d2d3;
 }

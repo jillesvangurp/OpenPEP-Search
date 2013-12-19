@@ -28,47 +28,78 @@ Berlin 13359, Germany
   Ayoub Benali: ayoub AT tesobe DOT com
 
  */
- function displayData(data) {
-    $('#display').addClass('displayResults')
-    $('#display').html("")
-    if (data.total > 0){
-      $('#display').append("<table id='resultTable'><tr><th>First</th><th>Middle</th><th>Surname</th><th>Position</th><th>Nationality</th><th>Residence</th></tr></table>")
-      $.each(data.hits, function(i, person) {
-        $('#resultTable').append("<tr class='personRow' name="+i+" id='personRow"+i+"'></tr>")
-        $('#personRow'+i).append("<td>"+person._source["First Name"]+"</td>")
-        $('#personRow'+i).append("<td>"+person._source["Middle Name"]+"</td>")
-        $('#personRow'+i).append("<td>"+person._source["Last Name"]+"</td>")
-        $('#personRow'+i).append("<td>"+person._source["Position"]+"</td>")
-        $('#personRow'+i).append("<td>"+person._source["Country of Citizenship"]+"</td>")
-        $('#personRow'+i).append("<td>"+person._source["Country of residence"]+"</td>")
-      })
-      enableClick(data.hits)
-    }
-    else{
-      $('#display').append( '<p class="not-found">It looks like we haven’t found the name you gave us in our database. This does not necessarily mean that the individual you are looking for is not a PEP.</p>')
-      $('#display').append( '<p class="not-found">We encourage financial institutions to take a comprehensive risk based approach to due diligence. Registered users are invited to search other sources and add information to the database.</p>')
-      $('#display').append( '<p class="not-found"><a href="#">Upload</a></p>')
-    }
-  }
+// on load:
+// get search parameters (if redirected from another page) and enable click functions
+$(document).ready(function(){
+  getSearchParam()
 
-  function enableClick(hits) {
-    $(".personRow" ).click(function() {
-      var id= hits[$(this).attr("name")]._source["Register"]
-      window.location.href = '/details?id='+id;
-    })
-  }
+  $("#searchBtn").click(function() {
+    doSearch()
+   })
 
-  function getNameArray(){
-    var name_array = []
-    var name_field = $('input[name=field]:checked').val()
-    if(name_field == "first")
-      name_array = ["First Name"]
-    else if (name_field == "last")
-      name_array = ["Last Name"]
-    else
-      name_array = ["First Name", "Middle Name", "Last Name"]
-    return JSON.stringify(name_array)
+  $("#advancedBtn").click(function() {
+    $('#advancedSearchBox').show('slow')
+
+    $("#birthday").datepicker();
+
+    $("#closeBox").click(function() {
+      $('#advancedSearchBox').hide('fast')
+     })
+   })
+})
+
+// search can also be started by pressing enter
+$(document).keypress(function(event){
+  var keycode = (event.keyCode ? event.keyCode : event.which);
+  if(keycode == '13'){
+    doSearch();
   }
+});
+
+
+// if search was started on other page (about or details), then extract search parameters and start search
+function getSearchParam(){
+  if($(location).attr('search') && $(location).attr('search') != ""){
+    var param = $(location).attr('search')
+    var array = param.split("=");
+    var search = array[1]
+    if(array[0]=='?s'){
+      var search = array[1]
+      $('#search_word').val(search)
+      sendSearchRequest()
+    }
+    else if(array[0]=='?id'){
+      getIdDetailsFor(array[1])
+    }
+  }
+  else if($(location).attr('pathname').indexOf("/details")!= -1){
+    noDetailsFor("no id")
+  }
+}
+
+function doSearch(){
+  if($('#search_word').val() && $('#search_word').val() != "" ){
+    $('#advancedSearchBox').css( "display", "none" )
+      if(($(location).attr('pathname').indexOf("/about") != -1) || ($(location).attr('pathname').indexOf("/details")!= -1)){
+        var search_word = $('#search_word').val()
+        window.location.href = '/index.html?s='+search_word;
+      }
+      else{
+        sendSearchRequest()
+      }
+  }
+}
+
+function sendSearchRequest(){
+  $.ajax({
+    type: "GET",
+    url: "http://localhost:8080/search?source="+createSearchJson(),
+    success: function(data){
+      displayData(data.hits)
+    },
+    dataType: "json"
+  });
+}
 
 function createSearchJson(){
   var search_json = '{'
@@ -106,54 +137,58 @@ function createSearchJson(){
   return search_json
 }
 
-$(document).ready(function(){
-  getSearchParam()
 
-  $("#searchBtn").click(function() {
-    doSearch()
-   })
-
-  $("#advancedBtn").click(function() {
-    $('#advancedSearchBox').show('slow')
-
-    $("#birthday").datepicker();
-
-    $("#closeBox").click(function() {
-      $('#advancedSearchBox').hide('fast')
-     })
-   })
-})
-
-function sendSearchRequest(){
-  $.ajax({
-    type: "GET",
-    url: "http://localhost:8080/search?source="+createSearchJson(),
-    success: function(data){
-      displayData(data.hits)
-    },
-    dataType: "json"
-  });
+// search in First name  / Last name / All names (default), depending on selected radio button in advanced search
+function getNameArray(){
+  var name_array = []
+  var name_field = $('input[name=field]:checked').val()
+  if(name_field == "first")
+    name_array = ["First Name"]
+  else if (name_field == "last")
+    name_array = ["Last Name"]
+  else
+    name_array = ["First Name", "Middle Name", "Last Name"]
+  return JSON.stringify(name_array)
 }
 
-function getSearchParam(){
-  if($(location).attr('search') && $(location).attr('search') != ""){
-    var param = $(location).attr('search')
-    var array = param.split("=");
-    var search = array[1]
-    if(array[0]=='?s'){
-      var search = array[1]
-      $('#search_word').val(search)
-      sendSearchRequest()
-    }
-    else if(array[0]=='?id'){
-      getIdDetailsFor(array[1])
-    }
+
+// if the search was successful, display data in #display
+function displayData(data) {
+  $('#display').addClass('displayResults')
+  $('#display').html("")
+  if (data.total > 0){
+    $('#display').append("<table id='resultTable'><tr><th>First</th><th>Middle</th><th>Surname</th><th>Position</th><th>Nationality</th><th>Residence</th></tr></table>")
+    $.each(data.hits, function(i, person) {
+      $('#resultTable').append("<tr class='personRow' name="+i+" id='personRow"+i+"'></tr>")
+      $('#personRow'+i).append("<td>"+person._source["First Name"]+"</td>")
+      $('#personRow'+i).append("<td>"+person._source["Middle Name"]+"</td>")
+      $('#personRow'+i).append("<td>"+person._source["Last Name"]+"</td>")
+      $('#personRow'+i).append("<td>"+person._source["Position"]+"</td>")
+      $('#personRow'+i).append("<td>"+person._source["Country of Citizenship"]+"</td>")
+      $('#personRow'+i).append("<td>"+person._source["Country of residence"]+"</td>")
+    })
+    $('#display').append('<div id="moreResults"><img src="/media/images/arrow.png">More Results</div>')
+    enableClick(data.hits)
   }
-  else if($(location).attr('pathname').indexOf("/details")!= -1){
-    noDetailsFor("no id")
+  else{
+    $('#display').append('<div id="noResult" class="not-found"></div>')
+    $('#noResult').append( '<p>It looks like we haven’t found the name you gave us in our database. This does not necessarily mean that the individual you are looking for is not a PEP.</p>')
+    $('#noResult').append( '<p>We encourage financial institutions to take a comprehensive risk based approach to due diligence. Registered users are invited to search other sources and add information to the database.</p>')
+    $('#noResult').append( '<p><a href="#">Upload</a></p>')
   }
 }
 
+// enable click on row for getting details of that person
+function enableClick(hits) {
+  $(".personRow" ).click(function() {
+    var id= hits[$(this).attr("name")]._source["Register"]
+    window.location.href = '/details?id='+id;
+  })
+}
+
+
+// search for a specific person/id
+// TODO: right now we use the source field 'Register' to get the person, should be replaced by a unique id
 function getIdDetailsFor(id){
   $.ajax({
     type: "GET",
@@ -169,6 +204,7 @@ function getIdDetailsFor(id){
     dataType: "json"
     });
 }
+
 
 function fillDetailPage(person){
   $("#title_field").append(person._source['Title'])
@@ -193,23 +229,6 @@ function noDetailsFor(id){
 
 
 
-$(document).keypress(function(event){
-  var keycode = (event.keyCode ? event.keyCode : event.which);
-  if(keycode == '13'){
-    doSearch();
-  }
 
-});
 
-function doSearch(){
-  if($('#search_word').val() && $('#search_word').val() != "" ){
-    $('#advancedSearchBox').css( "display", "none" )
-      if(($(location).attr('pathname').indexOf("/about") != -1) || ($(location).attr('pathname').indexOf("/details")!= -1)){
-        var search_word = $('#search_word').val()
-        window.location.href = '/index.html?s='+search_word;
-      }
-      else{
-        sendSearchRequest()
-      }
-  }
-}
+

@@ -1,0 +1,187 @@
+/**
+Open PEP Search
+Copyright (C) 2013, 2013, TESOBE / Music Pictures Ltd
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+Email: contact@tesobe.com
+TESOBE / Music Pictures Ltd
+Osloerstrasse 16/17
+Berlin 13359, Germany
+
+  This product includes software developed at
+  TESOBE (http://www.tesobe.com/)
+  by
+  Simon Redfern : simon AT tesobe DOT com
+  Nina Gänsdorfer: nina AT tesobe DOT com
+  Ayoub Benali: ayoub AT tesobe DOT com
+
+ */
+ /* Simple search */
+#search-bar{
+  height: 40px;
+}
+
+#search-field{
+  margin: 0 auto;
+  width: 400px;
+}
+input#search_word{
+  border: medium none;
+  float: left;
+  font-size: 21px;
+  padding: 9px;
+  width: 340px;
+}
+#searchBtn{
+  background-color: #0692b0;
+  width: 40px;
+  float: left;
+  padding: 1px;
+}
+#searchBtn img{
+  padding: 9px;;
+}
+#searchBtn:hover{
+  cursor: pointer;
+}
+
+/* Links in search bar */
+#links{
+  height: 100%;
+  font-size: 14px;
+  font-weight: bold;
+  font-style: italic;
+  width: 250px;
+  float: right;
+}
+#links div{
+  float: right;
+  width: 80px;
+  text-align: right;
+  margin-right: 10px;
+  margin-top: 8px;
+}
+#links a{
+  text-decoration: none;
+  color: #4A4848;
+  float: right;
+  width: 80px;
+  text-align: right;
+  margin-right: 10px;
+  margin-top: 8px;
+}
+#links div:hover{
+  cursor: pointer;
+}
+
+/* Advanced search */
+#advancedBtn{
+  background-color: #FFFFFF;
+  font: italic bold 11px "Bender";
+  height: 18px;
+  width: 130px;
+  text-align: center;
+  padding-top: 5px;
+  margin-left: 520px;
+  position: relative;
+}
+#advancedBtn:hover{
+  cursor: pointer;
+}
+
+#advancedSearchBox{
+  background-color: #d3d2d3;
+  font-size: 13px;
+  position: absolute;
+  width: 900px;
+  top: 217px;
+  padding-top: 22px;
+  display: none;
+}
+input[type=radio] {
+  display:none;
+  margin:10px;
+}
+input[type=radio] + label {
+  display:inline-block;
+  margin:10px;
+  padding: 5px 10px;
+  background-color: #FFFFFF;
+  color: #4a4848;
+  width: 100px;
+  position: relative;
+}
+input[type=radio]:checked + label {
+  background-image: none;
+  background-color:#4a4848;
+  color: #FFFFFF;
+}
+label img{
+  right: 15px;
+  position: absolute;
+
+}
+#nameFields{
+  width: 450px;
+  margin: 0 auto;
+}
+#inputFields{
+  padding-top: 20px ;
+  padding-bottom: 50px ;
+  width: 270px;
+  margin: 0 auto;
+}
+#inputFields input{
+  font-size: 14px;
+  width: 250px;
+  color: #4a4848;
+  border: medium none;
+  padding: 5px;
+  margin: 5px;
+}
+#closeBox{
+  background-color: #4A4848;
+  color: #FFFFFF;
+  font-style: italic;
+  font-weight: bold;
+  height: 35px;
+  padding: 5px;
+  position: absolute;
+  right: 0;
+  width: 35px;
+}
+#closeBox:hover{
+  cursor: pointer;
+}
+
+#inputFields input#birthday {
+  width: 225px;
+}
+#x{
+  font-style: normal;
+}
+#calenderBox{
+  background-color: #4A4848;
+  display: inline-block;
+  height: 27px;
+  margin: -8px;
+  position: relative;
+  width: 27px;
+}
+#calenderBox img{
+  position: absolute;
+  right: 4px;
+  top: 4px;
+}

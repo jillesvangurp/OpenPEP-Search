@@ -39,6 +39,7 @@ import net.liftweb.json.JsonAST.JValue
 import net.liftweb.json.parse
 import net.liftweb.json.Serialization.write
 import net.liftweb.util.Helpers
+import net.liftweb.util.Props
 import org.json._
 import dispatch._, Defaults._
 import scala.concurrent.Await
@@ -59,8 +60,9 @@ object SearchAPI extends RestHelper with Loggable {
           queryParamsList.mkString("&")
         }
       }
+      val url_es = Props.get("url_es","http://localhost:9200")
       val request =
-        url("http://localhost:9200/_search?"+queryString.getOrElse(""))
+        url(url_es+"/_search?"+queryString.getOrElse(""))
         .GET
       val response = getAPIResponse(request)
     JsonResponse(response.body,("Access-Control-Allow-Origin","*") :: Nil, Nil, response.code)
