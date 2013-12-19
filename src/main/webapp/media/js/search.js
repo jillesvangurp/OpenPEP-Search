@@ -16,8 +16,9 @@ function displayData(data) {
       enableClick(data.hits)
     }
     else{
-      $('#display').append('<p class="not-found">It looks like we haven’t found the name you gave us in our database. This does not necessarily mean that the individual you are looking for is not a PEP. We encourage financial institutions to take a comprehensive risk based approach to due diligence.
-Registered users are invited to search other sources and add information to the database.<p>')
+      $('#display').append( '<p class="not-found">It looks like we haven’t found the name you gave us in our database. This does not necessarily mean that the individual you are looking for is not a PEP.</p>')
+      $('#display').append( '<p class="not-found">We encourage financial institutions to take a comprehensive risk based approach to due diligence. Registered users are invited to search other sources and add information to the database.</p>')
+      $('#display').append( '<p class="not-found"><a href="#">Upload</a></p>')
     }
   }
 
@@ -117,15 +118,13 @@ $(document).ready(function(){
 
 function sendSearchRequest(){
   $.ajax({
-    type: "POST",
-    url: "http://localhost:8080/search",
-    data: createSearchJson(),
+    type: "GET",
+    url: "http://localhost:8080/search?source="+createSearchJson(),
     success: function(data){
       displayData(data.hits)
     },
-    dataType: "json",
-    contentType:'application/json'
-    });
+    dataType: "json"
+  });
 }
 
 function getSearchParam(){
@@ -141,7 +140,6 @@ function getSearchParam(){
     else if(array[0]=='?id'){
       getIdDetailsFor(array[1])
     }
-    // $(location).attr('search',"")
   }
   else if($(location).attr('pathname').indexOf("/details")!= -1){
     noDetailsFor("no id")
@@ -150,9 +148,8 @@ function getSearchParam(){
 
 function getIdDetailsFor(id){
   $.ajax({
-    type: "POST",
-    url: "http://localhost:8080/search",
-    data: '{"query":{"bool":{"must":{"match":{"Register":"'+id+'"}}}}}',
+    type: "GET",
+    url: 'http://localhost:8080/search?source={"query":{"bool":{"must":{"match":{"Register":"'+id+'"}}}}}',
     success: function(data){
       if(data.hits.total > 0){
         fillDetailPage(data.hits.hits[0])
@@ -161,8 +158,7 @@ function getIdDetailsFor(id){
         noDetailsFor(id)
       }
     },
-    dataType: "json",
-    contentType:'application/json'
+    dataType: "json"
     });
 }
 
