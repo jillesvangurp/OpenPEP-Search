@@ -1,7 +1,36 @@
-function displayData(data) {
+/**
+Open PEP Search
+Copyright (C) 2013, 2013, TESOBE / Music Pictures Ltd
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+Email: contact@tesobe.com
+TESOBE / Music Pictures Ltd
+Osloerstrasse 16/17
+Berlin 13359, Germany
+
+  This product includes software developed at
+  TESOBE (http://www.tesobe.com/)
+  by
+  Simon Redfern : simon AT tesobe DOT com
+  Nina Gänsdorfer: nina AT tesobe DOT com
+  Ayoub Benali: ayoub AT tesobe DOT com
+
+ */
+ function displayData(data) {
     $('#display').addClass('displayResults')
     $('#display').html("")
-    // $('#display').append("Results: "+data.total)
     if (data.total > 0){
       $('#display').append("<table id='resultTable'><tr><th>First</th><th>Middle</th><th>Surname</th><th>Position</th><th>Nationality</th><th>Residence</th></tr></table>")
       $.each(data.hits, function(i, person) {
@@ -41,22 +70,6 @@ function displayData(data) {
     return JSON.stringify(name_array)
   }
 
-//nicer: (and then use data: JSON.stringify(search_json) in ajax-function)
-  // var search_json = {
-  //   "query" : {
-  //     "multi_match" : {
-  //       "query" : ""+$('#search_word')+"",
-  //       "fields" : getNameArray()
-  //     }
-  //     "match" : {
-  //       "Country of residence" : ""+$('#residence')+""
-  //     },
-  //     "match" : {
-  //       "Country of Citizenship" : ""+$('#citizenship')+""
-  //     }
-  //   }
-  // }
-
 function createSearchJson(){
   var search_json = '{'
   search_json += '  "query" : {'
@@ -68,7 +81,8 @@ function createSearchJson(){
   search_json += '            "fields" : '+getNameArray()
   search_json += '          }'
   search_json += '        }'
-  // birthday data currently missing
+  // Birthday parameter is currently ignored, because
+  // there is no birthday available on Elastic Search
   // if ($('#birthday').val() != ""){
   //   search_json += '        ,{'
   //   val birthday = "" /need to transform in the right format
@@ -94,27 +108,21 @@ function createSearchJson(){
 
 $(document).ready(function(){
   getSearchParam()
+
   $("#searchBtn").click(function() {
-    $('#advancedSearchBox').css( "visibility", "hidden" )
-    if(($(location).attr('pathname').indexOf("/about") != -1) || ($(location).attr('pathname').indexOf("/details")!= -1)){
-      var search_word = $('#search_word').val()
-      window.location.href = '/index.html?s='+search_word;
-    }
-    else{
-      sendSearchRequest()
-    }
+    doSearch()
    })
 
   $("#advancedBtn").click(function() {
-    $('#advancedSearchBox').css( "visibility", "visible" )
-    $("#birthday").datepicker(); //TODO!
+    $('#advancedSearchBox').show('slow')
+
+    $("#birthday").datepicker();
 
     $("#closeBox").click(function() {
-      $('#advancedSearchBox').css( "visibility", "hidden" )
+      $('#advancedSearchBox').hide('fast')
      })
    })
 })
-
 
 function sendSearchRequest(){
   $.ajax({
@@ -180,6 +188,28 @@ function fillDetailPage(person){
 
 function noDetailsFor(id){
   $('.displayDetails').html("")
-  // $('.displayDetails').append('<p class="not-found">No details found.</p>')
   $('.displayDetails').append('<p class="not-found">No details for id <b>'+id+'</b> found.</p>')
+}
+
+
+
+$(document).keypress(function(event){
+  var keycode = (event.keyCode ? event.keyCode : event.which);
+  if(keycode == '13'){
+    doSearch();
+  }
+
+});
+
+function doSearch(){
+  if($('#search_word').val() && $('#search_word').val() != "" ){
+    $('#advancedSearchBox').css( "display", "none" )
+      if(($(location).attr('pathname').indexOf("/about") != -1) || ($(location).attr('pathname').indexOf("/details")!= -1)){
+        var search_word = $('#search_word').val()
+        window.location.href = '/index.html?s='+search_word;
+      }
+      else{
+        sendSearchRequest()
+      }
+  }
 }

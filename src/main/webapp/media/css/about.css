@@ -1,9 +1,42 @@
-#about{
+/**
+Open PEP Search
+Copyright (C) 2013, 2013, TESOBE / Music Pictures Ltd
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+Email: contact@tesobe.com
+TESOBE / Music Pictures Ltd
+Osloerstrasse 16/17
+Berlin 13359, Germany
+
+  This product includes software developed at
+  TESOBE (http://www.tesobe.com/)
+  by
+  Simon Redfern : simon AT tesobe DOT com
+  Nina Gänsdorfer: nina AT tesobe DOT com
+  Ayoub Benali: ayoub AT tesobe DOT com
+
+ */
+ #about{
   background-color: #FFFFFF;
   color: #343637;
   font: 14px "FaunaOne";
   margin-top: -23px;
-  padding: 5px 20px 400px;
+  padding: 5px 20px 50px;
+}
+#about div{
+  text-align: justify;
 }
 #about-headline{
   font: 53px "Bender";
@@ -15,16 +48,22 @@
 .about-info-left{
   padding-right: 70px;
 }
-.about-info-right{
-}
-
-#about div{
+.about-info-left, .about-info-right{
   width: 45%;
   float: left;
 }
+
 #about img{
   /*width: 300px;*/
 }
 #tech{
   margin-top: 70px;
+}
+#aboutBox{
+  border:1px solid #343637;
+  margin:10px;
+  padding: 15px;
+}
+#tesobe{
+  text-decoration: none;
 }

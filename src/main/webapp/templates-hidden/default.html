@@ -1,3 +1,30 @@
+<!-- Open PEP Search
+Copyright (C) 2013, 2013, TESOBE / Music Pictures Ltd
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+Email: contact@tesobe.com
+TESOBE / Music Pictures Ltd
+Osloerstrasse 16/17
+Berlin 13359, Germany
+
+  This product includes software developed at
+  TESOBE (http://www.tesobe.com/)
+  by
+  Simon Redfern : simon AT tesobe DOT com
+  Nina Gänsdorfer: nina AT tesobe DOT com
+  Ayoub Benali: ayoub AT tesobe DOT com -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,47 +34,48 @@
     <link href="/media/css/default.css" rel="stylesheet" type="text/css"/>
     <link href="/media/css/index.css" rel="stylesheet" type="text/css"/>
     <link href="/media/css/about.css" rel="stylesheet" type="text/css"/>
-    <script id="jquery" src="/media/js/jquery-2.0.0.min.js" type="text/javascript"></script>
+    <link href="/media/css/smoothness/jquery-ui-1.10.3.custom.min.css" rel="stylesheet" type="text/css"/>
+    <script id="jquery" src="/media/js/jquery-1.9.1.js" type="text/javascript"></script>
     <script id="jquery" src="/media/js/search.js" type="text/javascript"></script>
-    <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+    <script id="jquery" src="/media/js/jquery-ui-1.10.3.custom.min.js" type="text/javascript"></script>
 </head>
 <body>
   <div id="wrapper">
-    <h1 class="headline blue">Open PEPs Database</h1>
+    <h1 class="headline blue"><a href="index">Open PEPs Database</a></h1>
     <p class="subline">A free and open database to find politically exposed persons (PEPs) around the world.</p>
     <div class="hr"></div>
     <div id="search-bar">
     <div id="search-field">
       <input type="text" id="search_word" value="">
       <div id="searchBtn">
-        <img src="/images/loupe.png" alt="loupe">
+        <img src="/media/images/loupe.png" alt="loupe">
       </div>
     </div>
     <div id="links">
       <a id="aboutLink" href="about.html">
-        <img src="/images/about.png" alt="about">
+        <img src="/media/images/about.png" alt="about">
         About
       </a>
       <div id="uploadLink">
-        <img src="/images/upload.png" alt="upload">
+        <img src="/media/images/upload.png" alt="upload">
         Upload
       </div>
     </div>
   </div>
   <div class="hr"></div>
-  <div id="advancedBtn">Advanced search</div>
+  <div id="advancedBtn"><img src="/media/images/arrow-right.png" alt=""> Advanced search</div>
   <div id="advancedSearchBox">
     <div id="nameFields">
-      <input type="radio" id="first" name="field" value="first"><label for="first">First Name</label>
-      <input type="radio" id="last" name="field" value="last"><label for="last">Last Name</label>
-      <input type="radio" id="all" name="field" value="all" checked="checked"><label for="all">All</label>
+      <input type="radio" id="first" name="field" value="first"><label for="first">First Name<img src="/media/images/checkmark.png"></label>
+      <input type="radio" id="last" name="field" value="last"><label for="last">Last Name<img src="/media/images/checkmark.png"></label>
+      <input type="radio" id="all" name="field" value="all" checked="checked"><label for="all">All<img src="/media/images/checkmark.png"></label>
     </div>
     <div id="inputFields">
-      <!--input type="text" id="birthday" placeholder="Date of birth"><img id="dateBtn" src="/images/loupe.png" alt="calendar"-->
+      <input type="text" id="birthday" placeholder="Date of birth"><div id="calenderBox"><img id="dateBtn" src="/media/images/calendar.png" alt="calendar"></div>
       <input type="text" id="residence" placeholder="Country of Residence">
       <input type="text" id="citizenship" placeholder="Country of Citizenship">
     </div>
-    <div id="closeBox">X<br/>close</div>
+    <div id="closeBox"><span id="x">X</span><br/>close</div>
   </div>
     <div id="content">
       <lift:bind name="content" />
@@ -56,12 +84,12 @@
     <footer>
       <div class="left">
         <p class="footer-headline">Disclaimer</p>
-        <p>This database follows the United Nations Convention Against Corruption’s definition [hyperlink to About page] of politically exposed persons (PEPs).</p>
+        <p>This database follows the United Nations Convention Against Corruption’s definition of <a href="/about.html">politically exposed persons (PEPs).</a></p>
         <p>An Open PEPs search should not be regarded as a sufficient due diligence procedure. We encourage users to take a comprehensive risk-based approach to due diligence. </p>
         <p>Although we have made every effort to check the completeness and accuracy of the data provided, Open PEPs is not liable for any errors or inconsistencies. Please note that at this pilot stage, Open PEP data does not cover family members and close associates of PEPs. </p>
       </div>
       <div class="footer-right">
-        Technology by <span class="blue">TESOBE</span>
+        Technology by <a id="tesobe" href="http://tesobe.com">TESOBE</a></span>
       </div>
       <div class="clear"></div>
     </footer>
