@@ -1,4 +1,0 @@
-# Properties in this file will be read when running in dev mode
-csvPath=/home/nina/Documents/pep_data.csv
-es_index=people
-es_type=person

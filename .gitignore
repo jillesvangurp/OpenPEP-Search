@@ -6,6 +6,7 @@ syntax: glob
 *.bak
 #*.off
 *.old
+*.props
 
 # eclipse conf file
 .settings
