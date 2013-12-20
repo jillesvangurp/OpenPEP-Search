@@ -28,13 +28,26 @@ Berlin 13359, Germany
   Ayoub Benali: ayoub AT tesobe DOT com
 
  */
-// on load:
-// get search parameters (if redirected from another page) and enable click functions
-$(document).ready(function(){
-  getSearchParam()
 
+$(document).ready(function(){
+  if($(location).attr('search') && $(location).attr('search') != ""){
+    if($(location).attr('pathname').indexOf("/details")!= -1){
+      getIdDetailsFor(GetURLParameter("id"))
+    }
+    else{
+      // if there are search parameters, then start search
+      if($(location).attr('search') && $(location).attr('search') != ""){
+        initializeSearch()
+      }
+      enableButtons()
+    }
+  }
+})
+
+
+function enableButtons(){
   $("#searchBtn").click(function() {
-    doSearch()
+    attachParamsToURL()
    })
 
   $("#advancedBtn").click(function() {
@@ -46,55 +59,47 @@ $(document).ready(function(){
       $('#advancedSearchBox').hide('fast')
      })
    })
-})
+}
 
 // search can also be started by pressing enter
 $(document).keypress(function(event){
   var keycode = (event.keyCode ? event.keyCode : event.which);
   if(keycode == '13'){
-    doSearch();
+    attachParamsToURL();
   }
-});
+})
 
-
-// if search was started on other page (about or details), then extract search parameters and start search
-function getSearchParam(){
-  if($(location).attr('search') && $(location).attr('search') != ""){
-    var param = $(location).attr('search')
-    var array = param.split("=");
-    var search = array[1]
-    if(array[0]=='?s'){
-      var search = array[1]
-      $('#search_word').val(search)
-      $('#display').html("")
-      initializeSearch()
-    }
-    else if(array[0]=='?id'){
-      getIdDetailsFor(array[1])
-    }
-  }
-  else if($(location).attr('pathname').indexOf("/details")!= -1){
-    noDetailsFor("no id")
-  }
+// prepare search: load index with search params in url
+function attachParamsToURL(){
+  var search = $('#search_word').val()
+  var fields = getNameArray()
+  var res = $('#residence').val()
+  var cit = $('#citizenship').val()
+  window.location.href = '/index.html?search='+search+'&fields='+fields+'&res='+res+'&cit='+cit;
 }
 
-function doSearch(){
-  if($('#search_word').val() && $('#search_word').val() != "" ){
-    $('#advancedSearchBox').css( "display", "none" )
-      if(($(location).attr('pathname').indexOf("/about") != -1) || ($(location).attr('pathname').indexOf("/details")!= -1)){
-        var search_word = $('#search_word').val()
-        window.location.href = '/index.html?s='+search_word;
-      }
-      else{
-        initializeSearch()
-      }
-  }
-}
 
+
+// starting the search:
 function initializeSearch(){
-  offset = 0
-  limit = 5
+  search = GetURLParameter('search')
+  limit = 5,
+  fields = GetURLParameter('fields')
+  res = GetURLParameter('res')
+  cit = GetURLParameter('cit')
+  $('#search_word').val(search)
   sendSearchRequest()
+}
+
+function GetURLParameter(sParam){
+  var sPageURL = window.location.search.substring(1)
+  var sURLVariables = sPageURL.split('&')
+  for (var i = 0; i < sURLVariables.length; i++){
+    var sParameterName = sURLVariables[i].split('=')
+    if (sParameterName[0] == sParam){
+      return sParameterName[1]
+    }
+  }
 }
 
 function sendSearchRequest(){
@@ -109,39 +114,39 @@ function sendSearchRequest(){
 }
 
 function createSearchJson(){
-  var search_json = '{'
-  search_json += '  "from" : 0, "size" : '+limit+','
-  search_json += '  "query" : {'
-  search_json += '    "bool" : {'
-  search_json += '      "must" : ['
-  search_json += '        {'
-  search_json += '          "multi_match" : {'
-  search_json += '            "query" : "'+$('#search_word').val()+'",'
-  search_json += '            "fields" : '+getNameArray()+','
-  search_json += '            "fuzziness" : 0.4'
-  search_json += '          }'
-  search_json += '        }'
+  var search_json ='{'
+  search_json += '"from":0,"size":'+limit+','
+  search_json += '"query":{'
+  search_json += '"bool":{'
+  search_json += '"must":['
+  search_json += '{'
+  search_json += '"multi_match":{'
+  search_json += '"query":"'+search+'",'
+  search_json += '"fields":'+getNameArray()+','
+  search_json += '"fuzziness":0.4'
+  search_json += '}'
+  search_json += '}'
   // Birthday parameter is currently ignored, because
   // there is no birthday available on Elastic Search
   // if ($('#birthday').val() != ""){
-  //   search_json += '        ,{'
+  //   search_json += ',{'
   //   val birthday = "" /need to transform in the right format
-  //   search_json += '          "match" : {"Birthday" : "'+$('#birthday').val()+'"}'
-  //   search_json += '        }'
+  //   search_json += '"match":{"Birthday":"'+$('#birthday').val()+'"}'
+  //   search_json += '}'
   // }
-  if ($('#residence').val() && $('#residence').val() != ""){
-    search_json += '        ,{'
-    search_json += '          "match" : {"Country of residence" : "'+$('#residence').val()+'"}'
-    search_json += '        }'
+  if (res && res != ""){
+    search_json += ',{'
+    search_json += '"match":{"Country of residence":"'+res+'"}'
+    search_json += '}'
   }
-  if ($('#citizenship').val() && $('#citizenship').val() != ""){
-    search_json += '        ,{'
-    search_json += '          "match" : {"Country of Citizenship" : "'+$('#citizenship').val()+'"}'
-    search_json += '        }'
+  if (cit && cit != ""){
+    search_json += ',{'
+    search_json += '"match":{"Country of Citizenship":"'+cit+'"}'
+    search_json += '}'
   }
-  search_json += '      ]'
-  search_json += '    }'
-  search_json += '  }'
+  search_json += ']'
+  search_json += '}'
+  search_json += '}'
   search_json += '}'
   return search_json
 }
@@ -176,7 +181,9 @@ function displayData(data) {
       $('#personRow'+i).append("<td>"+person._source["Country of Citizenship"]+"</td>")
       $('#personRow'+i).append("<td>"+person._source["Country of residence"]+"</td>")
     })
-    $('#display').append('<div id="moreResults"><img src="/media/images/arrow.png">More Results</div>')
+    if(data.total > limit){
+      $('#display').append('<div id="moreResults"><img src="/media/images/arrow.png">More Results</div>')
+    }
     enableClick(data.hits)
   }
   else{
@@ -186,11 +193,12 @@ function displayData(data) {
     $('#noResult').append( '<p><a href="#">Upload</a></p>')
   }
 
+  if(data.total > limit){
     $("#moreResults").click(function() {
-      console.log(limit)
       limit = limit+5
       sendSearchRequest()
     })
+  }
 }
 
 // enable click on row for getting details of that person

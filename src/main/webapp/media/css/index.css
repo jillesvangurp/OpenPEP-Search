@@ -42,22 +42,23 @@ Berlin 13359, Germany
 .displayResults, .displayDetails{
   background-color: #FFFFFF;
   margin-top: -23px;
-  padding-top: 30px;
-  padding-bottom: 100px;
+  padding-bottom: 120px;
+  padding-top: 50px;
+  padding-left: 30px;
+  padding-right: 20px;
 }
 .displayDetails{
-  padding-left: 15px;
+  /*padding-left: 15px;*/
 }
 .displayDetails #fieldCol{
   width: 320px;
 }
 .displayDetails #valueCol{
-  width: 480px;
+  width: 510px;
 }
 table{
   font: 16px "FaunaOne";
   color: #5c5a5a;
-  margin:30px;
   border-collapse: collapse;
 }
 table th{
@@ -70,6 +71,9 @@ table td {
   height: 30px;
   border-top: 1px solid #dfe0e1;
   border-bottom: 1px solid #dfe0e1;
+}
+#resultTable{
+  width: 100%;
 }
 #resultTable td{
   min-width: 100px;

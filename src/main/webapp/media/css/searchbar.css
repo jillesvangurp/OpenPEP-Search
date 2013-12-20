@@ -45,13 +45,14 @@ input#search_word{
   width: 340px;
 }
 #searchBtn{
-  background-color: #0692b0;
-  width: 40px;
+  background-color: #0692B0;
   float: left;
-  padding: 1px;
+  height: 42px;
+  -webkit-margin-before:2px;
+  width: 40px;
 }
 #searchBtn img{
-  padding: 9px;;
+  padding: 10px;;
 }
 #searchBtn:hover{
   cursor: pointer;
