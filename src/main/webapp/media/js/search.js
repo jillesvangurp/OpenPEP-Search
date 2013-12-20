@@ -30,6 +30,7 @@ Berlin 13359, Germany
  */
 
 $(document).ready(function(){
+  enableButtons()
   if($(location).attr('search') && $(location).attr('search') != ""){
     if($(location).attr('pathname').indexOf("/details")!= -1){
       getIdDetailsFor(GetURLParameter("id"))
@@ -39,7 +40,6 @@ $(document).ready(function(){
       if($(location).attr('search') && $(location).attr('search') != ""){
         initializeSearch()
       }
-      enableButtons()
     }
   }
 })
@@ -122,8 +122,8 @@ function createSearchJson(){
   search_json += '{'
   search_json += '"multi_match":{'
   search_json += '"query":"'+search+'",'
-  search_json += '"fields":'+getNameArray()+','
-  search_json += '"fuzziness":0.4'
+  search_json += '"fields":'+fields+','
+  search_json += '"fuzziness":0.8'
   search_json += '}'
   search_json += '}'
   // Birthday parameter is currently ignored, because
