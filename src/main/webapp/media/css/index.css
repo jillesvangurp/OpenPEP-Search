@@ -41,7 +41,6 @@ Berlin 13359, Germany
 /* displaying search results */
 .displayResults, .displayDetails{
   background-color: #FFFFFF;
-  height: 500px;
   margin-top: -23px;
   padding-top: 30px;
   padding-bottom: 100px;
@@ -74,6 +73,7 @@ table td {
 }
 #resultTable td{
   min-width: 100px;
+  padding-right: 5px;
 }
 .personRow:hover{
   cursor: pointer;

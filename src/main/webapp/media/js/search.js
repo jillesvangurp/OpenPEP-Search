@@ -66,7 +66,8 @@ function getSearchParam(){
     if(array[0]=='?s'){
       var search = array[1]
       $('#search_word').val(search)
-      sendSearchRequest()
+      $('#display').html("")
+      initializeSearch()
     }
     else if(array[0]=='?id'){
       getIdDetailsFor(array[1])
@@ -85,15 +86,21 @@ function doSearch(){
         window.location.href = '/index.html?s='+search_word;
       }
       else{
-        sendSearchRequest()
+        initializeSearch()
       }
   }
+}
+
+function initializeSearch(){
+  offset = 0
+  limit = 5
+  sendSearchRequest()
 }
 
 function sendSearchRequest(){
   $.ajax({
     type: "GET",
-    url: "http://localhost:8080/search?source="+createSearchJson(),
+    url: "/search?source="+createSearchJson(),
     success: function(data){
       displayData(data.hits)
     },
@@ -103,13 +110,15 @@ function sendSearchRequest(){
 
 function createSearchJson(){
   var search_json = '{'
+  search_json += '  "from" : 0, "size" : '+limit+','
   search_json += '  "query" : {'
   search_json += '    "bool" : {'
   search_json += '      "must" : ['
   search_json += '        {'
   search_json += '          "multi_match" : {'
   search_json += '            "query" : "'+$('#search_word').val()+'",'
-  search_json += '            "fields" : '+getNameArray()
+  search_json += '            "fields" : '+getNameArray()+','
+  search_json += '            "fuzziness" : 0.4'
   search_json += '          }'
   search_json += '        }'
   // Birthday parameter is currently ignored, because
@@ -176,6 +185,12 @@ function displayData(data) {
     $('#noResult').append( '<p>We encourage financial institutions to take a comprehensive risk based approach to due diligence. Registered users are invited to search other sources and add information to the database.</p>')
     $('#noResult').append( '<p><a href="#">Upload</a></p>')
   }
+
+    $("#moreResults").click(function() {
+      console.log(limit)
+      limit = limit+5
+      sendSearchRequest()
+    })
 }
 
 // enable click on row for getting details of that person
@@ -192,7 +207,7 @@ function enableClick(hits) {
 function getIdDetailsFor(id){
   $.ajax({
     type: "GET",
-    url: 'http://localhost:8080/search?source={"query":{"bool":{"must":{"match":{"Register":"'+id+'"}}}}}',
+    url: '/search?source={"query":{"bool":{"must":{"match":{"Register":"'+id+'"}}}}}',
     success: function(data){
       if(data.hits.total > 0){
         fillDetailPage(data.hits.hits[0])
