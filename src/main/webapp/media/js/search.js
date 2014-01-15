@@ -87,7 +87,7 @@ function initializeSearch(){
   fields = GetURLParameter('fields')
   res = GetURLParameter('res')
   cit = GetURLParameter('cit')
-  $('#search_word').val(search)
+  $('#search_word').val(decodeURIComponent(search))
   sendSearchRequest()
 }
 
@@ -123,7 +123,7 @@ function createSearchJson(){
   search_json += '"multi_match":{'
   search_json += '"query":"'+search+'",'
   search_json += '"fields":'+fields+','
-  search_json += '"fuzziness":0.8'
+  search_json += '"fuzziness":0.4'
   search_json += '}'
   search_json += '}'
   // Birthday parameter is currently ignored, because
