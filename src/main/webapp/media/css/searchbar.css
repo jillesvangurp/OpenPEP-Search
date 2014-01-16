@@ -155,13 +155,20 @@ label img{
   width: 270px;
   margin: 0 auto;
 }
-#inputFields input{
+#inputFields input, select{
   font-size: 14px;
   width: 250px;
   color: #4a4848;
   border: medium none;
   padding: 5px;
   margin: 5px;
+}
+#inputFields select{
+  width: 260px;
+  background-color: white;
+}
+#inputFields select option{
+  color: #4a4848;
 }
 #closeBox{
   background-color: #4A4848;
