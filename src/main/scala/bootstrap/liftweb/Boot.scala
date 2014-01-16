@@ -56,6 +56,8 @@ class Boot {
     val sitemap = List(
       Menu.i("Home") / "index",
       Menu.i("About") / "about",
+      Menu.i("FAQ") / "faq",
+      Menu.i("Upload") / "upload",
       Menu.i("Details") / "details"
     )
 

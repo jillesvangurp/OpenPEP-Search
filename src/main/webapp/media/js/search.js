@@ -59,9 +59,9 @@ function enableButtons(){
       $('#advancedSearchBox').hide('fast')
      })
    })
-  $('#uploadLink').click(function(){
-    console.log("Upload not works")
-  })
+  // $('#uploadLink').click(function(){
+  //   alert("Nope, upload does not work yet.")
+  // })
 }
 
 // search can also be started by pressing enter

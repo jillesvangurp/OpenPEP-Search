@@ -59,13 +59,19 @@ input#search_word{
 }
 
 /* Links in search bar */
-#links{
+.links{
   height: 100%;
   font-size: 14px;
   font-weight: bold;
   font-style: italic;
-  width: 250px;
-  float: right;
+  width: 205px;
+}
+.links a{
+  text-decoration: none;
+  color: #4A4848;
+  width: 80px;
+  margin-left: 15px;
+  margin-right: 15px;
 }
 #links div{
   float: right;
@@ -74,17 +80,22 @@ input#search_word{
   margin-right: 10px;
   margin-top: 8px;
 }
-#links a{
-  text-decoration: none;
-  color: #4A4848;
-  float: right;
-  width: 80px;
-  text-align: right;
-  margin-right: 10px;
-  margin-top: 8px;
+#faqLink{
+  float: left;
 }
-#links div:hover{
-  cursor: pointer;
+.links a img,  #uploadLink img{
+  margin-top: 7px;
+}
+.links a span.label{
+  margin-top: 0px;
+}
+#links-left{
+  float: left;
+  padding-left: -15px;
+}
+#links-right{
+  float: right;
+  padding-right: -15px;
 }
 
 /* Advanced search */
