@@ -33,7 +33,7 @@ $(document).ready(function(){
   enableButtons()
   if($(location).attr('search') && $(location).attr('search') != ""){
     if($(location).attr('pathname').indexOf("/details")!= -1){
-      getIdDetailsFor(GetURLParameter("id"))
+      getIdDetailsFor(getURLParameter("id"))
     }
     else{
       // if there are search parameters, then start search
@@ -59,6 +59,9 @@ function enableButtons(){
       $('#advancedSearchBox').hide('fast')
      })
    })
+  $('#uploadLink').click(function(){
+    console.log("Upload not works")
+  })
 }
 
 // search can also be started by pressing enter
@@ -82,16 +85,16 @@ function attachParamsToURL(){
 
 // starting the search:
 function initializeSearch(){
-  search = GetURLParameter('search')
+  search = getURLParameter('search')
   limit = 5,
-  fields = GetURLParameter('fields')
-  res = GetURLParameter('res')
-  cit = GetURLParameter('cit')
+  fields = getURLParameter('fields')
+  res = getURLParameter('res')
+  cit = getURLParameter('cit')
   $('#search_word').val(decodeURIComponent(search))
   sendSearchRequest()
 }
 
-function GetURLParameter(sParam){
+function getURLParameter(sParam){
   var sPageURL = window.location.search.substring(1)
   var sURLVariables = sPageURL.split('&')
   for (var i = 0; i < sURLVariables.length; i++){
@@ -102,10 +105,12 @@ function GetURLParameter(sParam){
   }
 }
 
+
 function sendSearchRequest(){
+  var queryJson = ($('#search_word').val() == "") ? getAllRecords() : createSearchJson()
   $.ajax({
     type: "GET",
-    url: "/search?source="+createSearchJson(),
+    url: "/search?source="+queryJson,
     success: function(data){
       displayData(data.hits)
     },
@@ -113,56 +118,69 @@ function sendSearchRequest(){
   });
 }
 
+function getAllRecords(){
+  var allRecordsJson ={
+    "from":0,
+    "size":2*limit,
+    "query":{"match_all":{}},
+    "sort":["Last Name"]
+  }
+  return JSON.stringify(allRecordsJson)
+}
+
+
 function createSearchJson(){
-  var search_json ='{'
-  search_json += '"from":0,"size":'+limit+','
-  search_json += '"query":{'
-  search_json += '"bool":{'
-  search_json += '"must":['
-  search_json += '{'
-  search_json += '"multi_match":{'
-  search_json += '"query":"'+search+'",'
-  search_json += '"fields":'+fields+','
-  search_json += '"fuzziness":0.4'
-  search_json += '}'
-  search_json += '}'
+  var searchJson ={
+    "from":0,"size":limit,
+    "query":{
+      "bool":{
+        "must":[
+          {
+          "multi_match":{
+            "query":search,
+            "fields":getNameArray(),
+            "fuzziness":0.6
+            }
+          }
+        ]
+      }
+    }
+  }
+
   // Birthday parameter is currently ignored, because
   // there is no birthday available on Elastic Search
   // if ($('#birthday').val() != ""){
-  //   search_json += ',{'
-  //   val birthday = "" /need to transform in the right format
-  //   search_json += '"match":{"Birthday":"'+$('#birthday').val()+'"}'
-  //   search_json += '}'
+  //   var birthday = //birthday in right format
+  //   var birthMatch = {"match":{"birthday":birthday}}
+  //   searchJson.query.bool.must.push(birthMatch)
   // }
+
   if (res && res != ""){
-    search_json += ',{'
-    search_json += '"match":{"Country of residence":"'+res+'"}'
-    search_json += '}'
+    var resMatch = {"match":{"Country of residence":res}}
+    searchJson.query.bool.must.push(resMatch)
   }
+
   if (cit && cit != ""){
-    search_json += ',{'
-    search_json += '"match":{"Country of Citizenship":"'+cit+'"}'
-    search_json += '}'
+    var citMatch = {"match":{"Country of Citizenship":cit}}
+    searchJson.query.bool.must.push(citMatch)
   }
-  search_json += ']'
-  search_json += '}'
-  search_json += '}'
-  search_json += '}'
-  return search_json
+  return JSON.stringify(searchJson)
 }
 
 
 // search in First name  / Last name / All names (default), depending on selected radio button in advanced search
 function getNameArray(){
-  var name_array = []
+  var name_array = new Array()
   var name_field = $('input[name=field]:checked').val()
   if(name_field == "first")
-    name_array = ["First Name"]
+   name_array.push("First Name")
   else if (name_field == "last")
-    name_array = ["Last Name"]
+    name_array.push("Last Name")
   else
-    name_array = ["First Name", "Middle Name", "Last Name"]
-  return JSON.stringify(name_array)
+    name_array.push("First Name")
+    name_array.push("Middle Name")
+    name_array.push("Last Name")
+  return name_array
 }
 
 
@@ -184,7 +202,7 @@ function displayData(data) {
     if(data.total > limit){
       $('#display').append('<div id="moreResults"><img src="/media/images/arrow.png">More Results</div>')
     }
-    enableClick(data.hits)
+    enableGetDetailsClick(data.hits)
   }
   else{
     $('#display').append('<div id="noResult" class="not-found"></div>')
@@ -202,7 +220,7 @@ function displayData(data) {
 }
 
 // enable click on row for getting details of that person
-function enableClick(hits) {
+function enableGetDetailsClick(hits) {
   $(".personRow" ).click(function() {
     var id= hits[$(this).attr("name")]._source["Register"]
     window.location.href = '/details?id='+id;
