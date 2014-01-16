@@ -51,17 +51,14 @@ function enableButtons(){
    })
 
   $("#advancedBtn").click(function() {
-    $('#advancedSearchBox').show('slow')
+    $('#advancedSearchBox').slideDown('show')
 
     $("#birthday").datepicker();
 
     $("#closeBox").click(function() {
-      $('#advancedSearchBox').hide('fast')
+      $('#advancedSearchBox').slideUp('fast')
      })
    })
-  // $('#uploadLink').click(function(){
-  //   alert("Nope, upload does not work yet.")
-  // })
 }
 
 // search can also be started by pressing enter
