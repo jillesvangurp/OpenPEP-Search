@@ -30,26 +30,30 @@ Berlin 13359, Germany
  */
 
 $(document).ready(function(){
-  enableButtons()
-  if($(location).attr('search') && $(location).attr('search') != ""){
-    if($(location).attr('pathname').indexOf("/details")!= -1){
-      getIdDetailsFor(getURLParameter("id"))
-    }
-    else{
-      // if there are search parameters, then start search
-      if($(location).attr('search') && $(location).attr('search') != ""){
-        initializeSearch()
-      }
-    }
-  }
+  enableSearchButtons()
+  enableEnterClickToStartSearch()
+  checkUrlAndStartQuery()
 })
 
 
-function enableButtons(){
+function checkUrlAndStartQuery(){
+  if($(location).attr('search') && $(location).attr('search') != ""){
+    if($(location).attr('pathname').indexOf("/details")!= -1){
+      getIdDetailsFor(getURLParams("id"))
+    }
+    else if($(location).attr('search') && $(location).attr('search') != ""){
+      setGlobalSearchVariablesAndPrepareSearch()
+    }
+  }
+}
+
+function enableSearchButtons(){
+  // button in search bar
   $("#searchBtn").click(function() {
-    attachParamsToURL()
+    attachSearchParamsToURL()
    })
 
+  // buttons in advanced search box
   $("#advancedBtn").click(function() {
     $('#advancedSearchBox').slideDown('show')
 
@@ -61,16 +65,17 @@ function enableButtons(){
    })
 }
 
-// search can also be started by pressing enter
-$(document).keypress(function(event){
-  var keycode = (event.keyCode ? event.keyCode : event.which);
-  if(keycode == '13'){
-    attachParamsToURL();
-  }
-})
+function enableEnterClickToStartSearch(){
+  $(document).keypress(function(event){
+    var keycode = (event.keyCode ? event.keyCode : event.which);
+    if(keycode == '13'){
+      attachSearchParamsToURL();
+    }
+  })
+}
 
 // prepare search: load index with search params in url
-function attachParamsToURL(){
+function attachSearchParamsToURL(){
   var search = $('#search_word').val()
   var fields = getNameArray()
   var res = $('#residence').val()
@@ -79,32 +84,29 @@ function attachParamsToURL(){
 }
 
 
-
-// starting the search:
-function initializeSearch(){
-  search = getURLParameter('search')
+function setGlobalSearchVariablesAndPrepareSearch(){
+  search = getURLParams('search')
   limit = 5,
-  fields = getURLParameter('fields')
-  res = getURLParameter('res')
-  cit = getURLParameter('cit')
+  fields = getURLParams('fields')
+  res = getURLParams('res')
+  cit = getURLParams('cit')
   $('#search_word').val(decodeURIComponent(search))
   sendSearchRequest()
 }
 
-function getURLParameter(sParam){
-  var sPageURL = window.location.search.substring(1)
-  var sURLVariables = sPageURL.split('&')
-  for (var i = 0; i < sURLVariables.length; i++){
-    var sParameterName = sURLVariables[i].split('=')
-    if (sParameterName[0] == sParam){
-      return sParameterName[1]
+function getURLParams(paramName){
+  var url = window.location.search.substring(1)
+  var urlParams = url.split('&')
+  for (var i = 0; i < urlParams.length; i++){
+    var paramNameArray = urlParams[i].split('=')
+    if (paramNameArray[0] == paramName){
+      return paramNameArray[1]
     }
   }
 }
 
-
 function sendSearchRequest(){
-  var queryJson = ($('#search_word').val() == "") ? getAllRecords() : createSearchJson()
+  var queryJson = ($('#search_word').val() == "") ? getAllRecordsJson() : createSearchJson()
   $.ajax({
     type: "GET",
     url: "/search?source="+queryJson,
@@ -115,7 +117,7 @@ function sendSearchRequest(){
   });
 }
 
-function getAllRecords(){
+function getAllRecordsJson(){
   var allRecordsJson ={
     "from":0,
     "size":2*limit,
@@ -225,9 +227,8 @@ function enableGetDetailsClick(hits) {
 }
 
 
-// search for a specific person/id
 // TODO: right now we use the source field 'Register' to get the person, should be replaced by a unique id
-function getIdDetailsFor(id){
+function getIdDetailsFor(name, id){
   $.ajax({
     type: "GET",
     url: '/search?source={"query":{"bool":{"must":{"match":{"Register":"'+id+'"}}}}}',
