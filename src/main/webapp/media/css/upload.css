@@ -1,4 +1,5 @@
-<!-- Open PEP Search
+/**
+Open PEP Search
 Copyright (C) 2013, 2013, TESOBE / Music Pictures Ltd
 
 This program is free software: you can redistribute it and/or modify
@@ -24,11 +25,14 @@ Berlin 13359, Germany
   by
   Simon Redfern : simon AT tesobe DOT com
   Nina Gänsdorfer: nina AT tesobe DOT com
-  Ayoub Benali: ayoub AT tesobe DOT com -->
-  <div class="lift:surround?with=default;at=content">
-  <div id="upload">
-    <p>
-     Nope, Upload doesn't work yet.
-    </p>
-  </div>
-</div>
+  Ayoub Benali: ayoub AT tesobe DOT com
+
+ */
+#upload{
+  background-color: #FFFFFF;
+  color: #343637;
+  font: 24px "FaunaOne";
+  margin-top: -23px;
+  padding: 5px 20px 50px;
+  /*padding: 0 40px;*/
+}

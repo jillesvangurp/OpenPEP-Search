@@ -1,4 +1,2 @@
 # Properties in this file will be read when running in dev mode
-csvPath=/PATH/TO/DATA/file.csv
-es_index=INDEX-NAME
-es_type=TYPE-NAME
+url_es=URL_WHERE_ELASTICSEARCH_IS RUNNING
