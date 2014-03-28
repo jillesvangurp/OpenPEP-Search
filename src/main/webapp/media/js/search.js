@@ -109,6 +109,10 @@ function sendSearchRequest(){
   var queryJson = ($('#search_word').val() == "") ? getAllRecordsJson() : createSearchJson()
   $.ajax({
     type: "GET",
+    // this may work but beware of url length issues in browsers, especially on mobile
+    // using POST is the recommended workaround for Javascript in es. In other languages you can actually GET
+    // something with a body. Given that this is broken in javascript, using POST is an acceptable compromise to 
+    // accomodate the quite complex query DSL. Reality is that browsers and severs can truncate long urls.
     url: "/search?source="+queryJson,
     success: function(data){
       displayData(data.hits)
@@ -120,6 +124,7 @@ function sendSearchRequest(){
 function getAllRecordsJson(){
   var allRecordsJson ={
     "from":0,
+    // FIXME why are you asking for more than you need?
     "size":2*limit,
     "query":{"match_all":{}},
     "sort":["Last Name"]
@@ -136,6 +141,8 @@ function createSearchJson(){
         "must":[
           {
           "multi_match":{
+            // FIXME you may want to think about setting up some mapping to apply some analyzers to this
+            // field. For example normalizing non ascii characters to their ascii equivalent, lowercasing everything, etc.
             "query":search,
             "fields":getNameArray(),
             "fuzziness":0.6
@@ -146,6 +153,11 @@ function createSearchJson(){
     }
   }
 
+
+  // FIXME  Elastic search has date support you may want to either set up a custom mapping if you want to use a non standard date format. 
+  // Or add dates as strings in iso 8601 format.  You can then do range queries on that
+  
+  
   // Birthday parameter is currently ignored, because
   // there is no birthday available on Elastic Search
   // if ($('#birthday').val() != ""){
@@ -154,6 +166,9 @@ function createSearchJson(){
   //   searchJson.query.bool.must.push(birthMatch)
   // }
 
+  // FIXME you could use term queries if you set the field to non analyzed.
+  // Also, using a filter instead of a query might give you some performance boost and
+  // is a nice opportunity for caching on the elastic search side as well.
   if (res && res != ""){
     var resMatch = {"match":{"Country of residence":res}}
     searchJson.query.bool.must.push(resMatch)
@@ -231,6 +246,7 @@ function enableGetDetailsClick(hits) {
 function getIdDetailsFor(name, id){
   $.ajax({
     type: "GET",
+    // FIXME you may get false positives with a match query
     url: '/search?source={"query":{"bool":{"must":{"match":{"Register":"'+id+'"}}}}}',
     success: function(data){
       if(data.hits.total > 0){
